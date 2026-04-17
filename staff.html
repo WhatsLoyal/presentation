@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WhatsLoyalty · Staff</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .pin-dot { transition: all 0.15s ease; }
+  .num-btn:active { transform: scale(0.93); }
+  .slide-up { animation: slideUp 0.3s ease forwards; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .pulse-green { animation: pulseG 1.8s ease-in-out infinite; }
+  @keyframes pulseG { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .qr-btn { border: 2px dashed #86efac; }
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .animate-spin { animation: spin 0.8s linear infinite; }
+</style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+<!-- LOGIN -->
+<div id="login-screen" class="min-h-screen flex flex-col items-center justify-center px-6 bg-white">
+  <div class="mb-8 text-center">
+    <div class="flex items-center justify-center gap-2 mb-1">
+      <span class="text-3xl">💬</span>
+      <span class="text-2xl font-bold text-slate-800">Whats<span class="text-green-600">Loyalty</span></span>
+    </div>
+    <p class="text-xs text-slate-400 tracking-widest uppercase mt-1">Panel de Staff</p>
+  </div>
+
+  <div class="w-full max-w-xs bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+    <h2 class="text-center text-sm font-semibold text-slate-500 mb-5">Introduce tu PIN</h2>
+    <div class="flex justify-center gap-3 mb-6">
+      <div class="pin-dot w-3 h-3 rounded-full bg-slate-200" id="d0"></div>
+      <div class="pin-dot w-3 h-3 rounded-full bg-slate-200" id="d1"></div>
+      <div class="pin-dot w-3 h-3 rounded-full bg-slate-200" id="d2"></div>
+      <div class="pin-dot w-3 h-3 rounded-full bg-slate-200" id="d3"></div>
+    </div>
+    <div class="grid grid-cols-3 gap-2">
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('1')">1</button>
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('2')">2</button>
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('3')">3</button>
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('4')">4</button>
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('5')">5</button>
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('6')">6</button>
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('7')">7</button>
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('8')">8</button>
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('9')">9</button>
+      <div></div>
+      <button class="num-btn bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl py-4 text-xl font-semibold text-slate-700 transition-all" onclick="addPin('0')">0</button>
+      <button class="num-btn hover:bg-red-50 rounded-xl py-4 text-slate-400 text-lg transition-all" onclick="delPin()">⌫</button>
+    </div>
+    <p class="text-center text-xs text-red-500 mt-4 min-h-[1.2em]" id="login-error"></p>
+  </div>
+  <p class="mt-6 text-xs text-slate-300">WhatsLoyalty © 2026</p>
+</div>
+
+<!-- APP -->
+<div id="app-screen" class="hidden min-h-screen bg-slate-50" style="flex-direction:column">
+
+  <header class="bg-white border-b border-slate-100 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">💬</span>
+        <span class="font-bold text-slate-800">Whats<span class="text-green-600">Loyalty</span></span>
+        <span class="text-xs bg-green-100 text-green-700 font-medium px-2 py-0.5 rounded-full">Staff</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-green-500 pulse-green inline-block"></span>
+          <span class="text-xs text-slate-400">En línea</span>
+        </div>
+        <button onclick="logout()" class="text-xs text-slate-400 hover:text-slate-600 transition-colors">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-lg mx-auto w-full px-4 py-5 space-y-4 pb-10">
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 text-center">
+        <div class="text-3xl font-bold text-green-600" id="stat-registros">0</div>
+        <div class="text-xs text-slate-400 mt-0.5">Registros hoy</div>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 text-center">
+        <div class="text-3xl font-bold text-slate-800" id="stat-pts">0</div>
+        <div class="text-xs text-slate-400 mt-0.5">Puntos dados</div>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-semibold text-slate-800">Registrar consumo</h3>
+        <!-- Botón QR futuro -->
+        <button onclick="abrirQR()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-green-600 text-xs font-medium hover:bg-green-50 transition-colors" style="border:2px dashed #86efac">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3"/>
+          </svg>
+          QR
+          <span class="text-xs bg-amber-100 text-amber-600 px-1 py-0.5 rounded font-bold">v2</span>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2 mb-4">
+        <div class="flex-1 h-px bg-slate-100"></div>
+        <span class="text-xs text-slate-300">introducir manualmente</span>
+        <div class="flex-1 h-px bg-slate-100"></div>
+      </div>
+
+      <!-- Tel -->
+      <div class="mb-3">
+        <label class="block text-xs font-medium text-slate-500 mb-1.5">Teléfono del cliente</label>
+        <input type="tel" id="telefono" placeholder="+34 600 000 000" inputmode="tel"
+          class="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 transition-all">
+      </div>
+
+      <!-- Importe -->
+      <div class="mb-3">
+        <label class="block text-xs font-medium text-slate-500 mb-1.5">Importe total</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">€</span>
+          <input type="number" id="importe" placeholder="0.00" min="0" step="0.50" inputmode="decimal"
+            oninput="actualizarPreview()"
+            class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 text-slate-800 text-xl font-semibold focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 transition-all">
+        </div>
+        <div id="pts-preview" class="mt-1.5 text-xs text-slate-400 min-h-[1.2em]"></div>
+      </div>
+
+      <!-- Mesa -->
+      <div class="mb-4">
+        <label class="block text-xs font-medium text-slate-500 mb-1.5">Mesa <span class="text-slate-300">(opcional)</span></label>
+        <input type="text" id="mesa" placeholder="Mesa 4"
+          class="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 transition-all">
+      </div>
+
+      <button id="submit-btn" onclick="registrar()"
+        class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3.5 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-sm shadow-green-200">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Registrar y enviar puntos
+      </button>
+    </div>
+
+    <!-- Éxito -->
+    <div id="result-card" class="hidden bg-white rounded-2xl border border-green-200 shadow-sm p-5 slide-up">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-green-700">¡Puntos enviados!</div>
+          <div class="text-xs text-slate-400">Mensaje WhatsApp enviado al cliente</div>
+        </div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4 mb-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs text-slate-500">Puntos ganados esta visita</span>
+          <span class="text-2xl font-bold text-green-600" id="res-pts">+8</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-slate-500">Total acumulado cliente</span>
+          <span class="text-lg font-semibold text-slate-800"><span id="res-total">—</span> pts</span>
+        </div>
+        <div class="mt-2 pt-2 border-t border-slate-200">
+          <span class="text-xs text-slate-400" id="res-next"></span>
+        </div>
+      </div>
+      <button onclick="resetForm()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-3 rounded-xl text-sm transition-all">
+        ← Nuevo registro
+      </button>
+    </div>
+
+    <!-- Error -->
+    <div id="result-error" class="hidden bg-red-50 border border-red-200 rounded-2xl p-4 flex items-center gap-3">
+      <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </div>
+      <div>
+        <div class="text-sm font-semibold text-red-700">Error de conexión</div>
+        <div class="text-xs text-red-500 mt-0.5">Comprueba el WiFi y vuelve a intentarlo.</div>
+      </div>
+    </div>
+
+    <!-- Recientes -->
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+      <h3 class="text-sm font-semibold text-slate-800 mb-3">Últimos registros</h3>
+      <div id="recent-list">
+        <p class="text-xs text-slate-300 text-center py-3">Sin registros aún hoy</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Modal QR futuro -->
+<div id="qr-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-end justify-center px-4 pb-6">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-sm slide-up">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-semibold text-slate-800">Escanear QR del cliente</h3>
+      <button onclick="cerrarQR()" class="text-slate-400 hover:text-slate-600">✕</button>
+    </div>
+    <div class="bg-slate-900 rounded-xl aspect-square flex flex-col items-center justify-center mb-4 relative">
+      <div class="absolute top-5 left-5 w-7 h-7 border-t-4 border-l-4 border-green-400 rounded-tl-lg"></div>
+      <div class="absolute top-5 right-5 w-7 h-7 border-t-4 border-r-4 border-green-400 rounded-tr-lg"></div>
+      <div class="absolute bottom-5 left-5 w-7 h-7 border-b-4 border-l-4 border-green-400 rounded-bl-lg"></div>
+      <div class="absolute bottom-5 right-5 w-7 h-7 border-b-4 border-r-4 border-green-400 rounded-br-lg"></div>
+      <p class="text-white/30 text-sm text-center">📷<br>Cámara disponible en v2.0</p>
+    </div>
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4">
+      <p class="text-xs text-amber-700 font-medium">🚧 En desarrollo · Versión 2.0</p>
+      <p class="text-xs text-amber-600 mt-0.5">El camarero escaneará el QR del cliente directamente. Por ahora introduce el teléfono manualmente.</p>
+    </div>
+    <button onclick="cerrarQR()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-3 rounded-xl text-sm transition-all">
+      Usar teléfono manual
+    </button>
+  </div>
+</div>
+
+<script>
+const PIN    = '2607'
+const HOOK   = 'https://hook.eu1.make.com/1rve13be2mc6wiwq4e5c6jhbisbbueoa'
+const PRIZES = [{pts:10,n:'Café'},{pts:25,n:'Tapa Polkera'},{pts:50,n:'Menú Polkero'},{pts:100,n:'Cena para dos'},{pts:200,n:'Mesa del Chef'}]
+
+let pin='', stats={r:0,p:0}, rec=[]
+
+function pts(imp){
+  if(imp<=0)return 0; if(imp<=5)return 1; if(imp<=15)return 3
+  if(imp<=30)return 8; if(imp<=50)return 15; return 25
+}
+
+function actualizarPreview(){
+  const imp=parseFloat(document.getElementById('importe').value)||0
+  const el=document.getElementById('pts-preview')
+  if(!imp){el.textContent='';return}
+  const p=pts(imp), sig=PRIZES.find(x=>x.pts>p)
+  el.innerHTML=`<span class="text-green-600 font-semibold">+${p} puntos</span>${sig?` · Faltan ${sig.pts-p} pts para ${sig.n}`:' · ¡Nivel máximo!'}`
+}
+
+function addPin(d){if(pin.length>=4)return;pin+=d;dots();if(pin.length===4)setTimeout(check,140)}
+function delPin(){pin=pin.slice(0,-1);dots();document.getElementById('login-error').textContent=''}
+function dots(){for(let i=0;i<4;i++){const d=document.getElementById('d'+i);i<pin.length?d.classList.replace('bg-slate-200','bg-green-500'):d.classList.replace('bg-green-500','bg-slate-200')}}
+function check(){
+  if(pin===PIN){
+    document.getElementById('login-screen').classList.add('hidden')
+    document.getElementById('app-screen').classList.remove('hidden')
+    document.getElementById('app-screen').style.display='flex'
+  }else{
+    document.getElementById('login-error').textContent='PIN incorrecto'
+    pin='';dots()
+    if(navigator.vibrate)navigator.vibrate([80,40,80])
+  }
+}
+function logout(){
+  pin='';dots()
+  document.getElementById('login-screen').classList.remove('hidden')
+  document.getElementById('app-screen').classList.add('hidden')
+  document.getElementById('app-screen').style.display=''
+  document.getElementById('login-error').textContent=''
+}
+function abrirQR(){document.getElementById('qr-modal').classList.remove('hidden')}
+function cerrarQR(){document.getElementById('qr-modal').classList.add('hidden')}
+
+async function registrar(){
+  const tel=document.getElementById('telefono').value.trim()
+  const imp=parseFloat(document.getElementById('importe').value)||0
+  const mesa=document.getElementById('mesa').value.trim()
+  if(!tel||imp<=0){
+    const b=document.getElementById('submit-btn')
+    b.classList.add('ring-2','ring-red-300')
+    setTimeout(()=>b.classList.remove('ring-2','ring-red-300'),1200)
+    return
+  }
+  const b=document.getElementById('submit-btn'), p=pts(imp)
+  b.disabled=true
+  b.innerHTML='<svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Enviando...'
+  document.getElementById('result-card').classList.add('hidden')
+  document.getElementById('result-error').classList.add('hidden')
+
+  let r=null
+  try{
+    const res=await fetch(HOOK,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({telefono:tel,importe:imp,puntos:p,mesa:mesa||'Sin mesa',timestamp:new Date().toISOString(),bar_id:'POLKA_DONOSTI'})})
+    r=await res.json().catch(()=>({}))
+  }catch(e){
+    document.getElementById('result-error').classList.remove('hidden')
+    resetBtn(b);return
+  }
+
+  stats.r++;stats.p+=p
+  document.getElementById('stat-registros').textContent=stats.r
+  document.getElementById('stat-pts').textContent=stats.p
+
+  rec.unshift({tel:tel.slice(-4),p,imp,h:new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})})
+  if(rec.length>6)rec.pop()
+  renderRec()
+
+  const total=r?.puntos_total??(p+Math.floor(Math.random()*35)+5)
+  const sig=PRIZES.find(x=>x.pts>total)
+  document.getElementById('res-pts').textContent='+'+p
+  document.getElementById('res-total').textContent=total
+  document.getElementById('res-next').textContent=sig?`Le faltan ${sig.pts-total} pts para ${sig.n}`:'🏆 ¡Nivel máximo!'
+  document.getElementById('result-card').classList.remove('hidden')
+  if(navigator.vibrate)navigator.vibrate(60)
+  resetBtn(b)
+}
+
+function resetBtn(b){
+  b=b||document.getElementById('submit-btn');b.disabled=false
+  b.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Registrar y enviar puntos'
+}
+function resetForm(){
+  ['telefono','importe','mesa'].forEach(id=>document.getElementById(id).value='')
+  document.getElementById('pts-preview').textContent=''
+  document.getElementById('result-card').classList.add('hidden')
+  document.getElementById('result-error').classList.add('hidden')
+  document.getElementById('telefono').focus()
+}
+function renderRec(){
+  const el=document.getElementById('recent-list')
+  if(!rec.length){el.innerHTML='<p class="text-xs text-slate-300 text-center py-3">Sin registros aún hoy</p>';return}
+  el.innerHTML=rec.map(r=>`
+    <div class="flex items-center justify-between py-2.5 border-b border-slate-50 last:border-0">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 text-xs">👤</div>
+        <div>
+          <div class="text-xs font-mono text-slate-600">···${r.tel}</div>
+          <div class="text-xs text-slate-400">${r.h}</div>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="text-sm font-semibold text-green-600">+${r.p} pts</div>
+        <div class="text-xs text-slate-400">${r.imp.toFixed(2)}€</div>
+      </div>
+    </div>`).join('')
+}
+</script>
+</body>
+</html>
