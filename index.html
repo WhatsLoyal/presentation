@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Puerta del Sol · A Estrada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --marino:  #1B2A4A;
+  --marino-d:#0f1a2e;
+  --oro:     #C9A84C;
+  --oro-l:   #E8C97A;
+  --crema:   #F7F3EC;
+  --crema2:  #EDE7D9;
+  --terrac:  #B85C38;
+  --texto:   #2C1F14;
+  --gris:    #7a7060;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'EB Garamond',Georgia,serif;
+  background:var(--crema);
+  color:var(--texto);
+  overflow-x:hidden;
+}
+
+/* ── PORTADA ── */
+.portada{
+  min-height:100vh;
+  background:var(--marino-d);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;
+  overflow:hidden;
+  padding:2rem;
+}
+
+.portada::before{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(201,168,76,.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba(184,92,56,.06) 0%, transparent 50%);
+}
+
+/* Patrón de azulejos sutil en esquinas */
+.portada::after{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(201,168,76,.04) 0px, rgba(201,168,76,.04) 1px, transparent 1px, transparent 20px),
+    repeating-linear-gradient(-45deg, rgba(201,168,76,.04) 0px, rgba(201,168,76,.04) 1px, transparent 1px, transparent 20px);
+  pointer-events:none;
+}
+
+.portada-inner{
+  position:relative;z-index:2;
+  text-align:center;
+  max-width:520px;
+}
+
+.portada-pretitulo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.8rem;
+  font-weight:300;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--oro);
+  margin-bottom:2rem;
+}
+
+.portada-marco{
+  border:1px solid rgba(201,168,76,.4);
+  padding:2.5rem 3rem;
+  position:relative;
+  margin-bottom:2rem;
+}
+.portada-marco::before,.portada-marco::after{
+  content:'◆';
+  position:absolute;
+  font-size:.6rem;
+  color:var(--oro);
+}
+.portada-marco::before{top:.6rem;left:.6rem}
+.portada-marco::after{bottom:.6rem;right:.6rem}
+
+.portada-titulo{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,8vw,4.5rem);
+  font-weight:900;
+  color:#fff;
+  line-height:1;
+  letter-spacing:-.02em;
+  margin-bottom:.5rem;
+}
+.portada-titulo em{
+  font-style:italic;
+  color:var(--oro);
+  display:block;
+  font-size:.6em;
+  font-weight:400;
+  letter-spacing:.05em;
+}
+
+.portada-lugar{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;
+  color:rgba(255,255,255,.5);
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  margin-top:1rem;
+}
+
+.portada-lema{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:1.1rem;
+  color:rgba(255,255,255,.6);
+  line-height:1.6;
+  margin-bottom:2.5rem;
+}
+
+.portada-divider{
+  display:flex;align-items:center;gap:1rem;
+  margin:1.5rem 0;
+}
+.portada-divider::before,.portada-divider::after{
+  content:'';flex:1;
+  height:1px;background:rgba(201,168,76,.3);
+}
+.portada-divider span{
+  font-size:.7rem;color:var(--oro);letter-spacing:.2em;
+}
+
+.btn-carta{
+  display:inline-block;
+  background:var(--oro);
+  color:var(--marino-d);
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:.9rem 2.5rem;
+  text-decoration:none;
+  border:none;cursor:pointer;
+  transition:background .2s,transform .2s;
+}
+.btn-carta:hover{background:var(--oro-l);transform:translateY(-2px)}
+
+.portada-anos{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.75rem;
+  color:rgba(255,255,255,.3);
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  margin-top:2rem;
+}
+
+/* ── HISTORIA INTRO ── */
+.historia{
+  background:var(--marino);
+  padding:5rem 1.5rem;
+  text-align:center;
+  position:relative;
+}
+.historia::before{
+  content:'1920 — 2024';
+  position:absolute;
+  top:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Cormorant Garamond',serif;
+  font-size:.7rem;color:rgba(201,168,76,.4);
+  letter-spacing:.3em;text-transform:uppercase;
+}
+.historia-inner{max-width:640px;margin:0 auto}
+.historia h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.6rem,4vw,2.4rem);
+  font-weight:400;font-style:italic;
+  color:var(--oro);
+  margin-bottom:2rem;
+}
+.historia p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;font-weight:300;
+  color:rgba(255,255,255,.7);
+  line-height:1.9;margin-bottom:1rem;
+}
+.historia strong{color:var(--oro-l);font-weight:600}
+
+/* ── NAV CARTA ── */
+.nav-carta{
+  position:sticky;top:0;z-index:50;
+  background:var(--marino-d);
+  border-bottom:1px solid rgba(201,168,76,.2);
+  padding:.75rem 1.5rem;
+  overflow-x:auto;
+  white-space:nowrap;
+  scrollbar-width:none;
+}
+.nav-carta::-webkit-scrollbar{display:none}
+.nav-carta-inner{
+  display:inline-flex;gap:0;
+  min-width:100%;justify-content:center;
+}
+.nav-btn{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.78rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);
+  background:none;border:none;cursor:pointer;
+  padding:.5rem 1rem;
+  border-right:1px solid rgba(201,168,76,.15);
+  transition:color .2s;
+  white-space:nowrap;
+}
+.nav-btn:last-child{border-right:none}
+.nav-btn:hover,.nav-btn.active{color:var(--oro)}
+
+/* ── SECCIONES CARTA ── */
+.seccion{
+  padding:4rem 1.5rem;
+  border-bottom:1px solid rgba(0,0,0,.06);
+}
+.seccion:nth-child(even){background:var(--crema2)}
+.seccion:nth-child(odd){background:var(--crema)}
+
+.sec-header{
+  text-align:center;
+  margin-bottom:3rem;
+  position:relative;
+}
+.sec-numero{
+  font-family:'Playfair Display',serif;
+  font-size:4rem;font-weight:900;
+  color:rgba(201,168,76,.12);
+  line-height:1;
+  position:absolute;
+  top:-1rem;left:50%;transform:translateX(-50%);
+  pointer-events:none;
+  white-space:nowrap;
+}
+.sec-tag{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.72rem;font-weight:600;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--terrac);
+  margin-bottom:.75rem;
+  display:flex;align-items:center;justify-content:center;gap:.75rem;
+}
+.sec-tag::before,.sec-tag::after{
+  content:'';width:30px;height:1px;background:var(--terrac);
+}
+.sec-titulo{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.8rem,5vw,2.8rem);
+  font-weight:700;
+  color:var(--marino);
+  line-height:1.1;
+  margin-bottom:.75rem;
+}
+.sec-historia{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:1rem;
+  color:var(--gris);
+  line-height:1.7;
+  max-width:520px;
+  margin:0 auto;
+}
+
+/* ── ITEMS CARTA ── */
+.items{
+  max-width:680px;margin:0 auto;
+  display:flex;flex-direction:column;gap:0;
+}
+.item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:1rem;
+  padding:1.4rem 0;
+  border-bottom:1px solid rgba(0,0,0,.07);
+  align-items:start;
+  transition:background .15s;
+}
+.item:last-child{border-bottom:none}
+.item:hover{background:rgba(201,168,76,.04);margin:0 -1rem;padding-left:1rem;padding-right:1rem}
+.item-left{}
+.item-nombre{
+  font-family:'Playfair Display',serif;
+  font-size:1rem;font-weight:700;
+  color:var(--marino);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin-bottom:.2rem;
+}
+.item-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.92rem;font-weight:300;
+  color:var(--gris);
+  font-style:italic;
+  line-height:1.4;
+  margin-bottom:.3rem;
+}
+.item-historia{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.78rem;
+  color:rgba(184,92,56,.7);
+  font-style:italic;
+  line-height:1.4;
+}
+.item-precio{
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;font-weight:700;
+  color:var(--terrac);
+  white-space:nowrap;
+  padding-top:.1rem;
+}
+
+/* ── COMBINADOS (diseño especial) ── */
+.combinado-card{
+  background:var(--marino);
+  border:1px solid rgba(201,168,76,.25);
+  border-radius:2px;
+  padding:1.75rem;
+  margin-bottom:1rem;
+  position:relative;
+  overflow:hidden;
+}
+.combinado-card::before{
+  content:'';
+  position:absolute;top:0;left:0;
+  width:3px;height:100%;
+  background:var(--oro);
+}
+.combinado-nombre{
+  font-family:'Playfair Display',serif;
+  font-size:1.3rem;font-weight:700;font-style:italic;
+  color:var(--oro);
+  margin-bottom:.4rem;
+}
+.combinado-ingredientes{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;font-weight:300;
+  color:rgba(255,255,255,.75);
+  margin-bottom:.5rem;
+  font-style:italic;
+}
+.combinado-historia{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.82rem;
+  color:rgba(255,255,255,.45);
+  line-height:1.6;
+  font-style:italic;
+}
+.combinado-precio{
+  position:absolute;top:1.75rem;right:1.75rem;
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;font-weight:700;
+  color:var(--oro);
+}
+
+/* ── FOOTER ── */
+.carta-footer{
+  background:var(--marino-d);
+  padding:4rem 1.5rem;
+  text-align:center;
+}
+.carta-footer p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;font-weight:300;font-style:italic;
+  color:rgba(255,255,255,.4);
+  line-height:1.8;
+  max-width:480px;margin:0 auto 1.5rem;
+}
+.carta-footer .logo-footer{
+  font-family:'Playfair Display',serif;
+  font-size:1.8rem;font-weight:900;
+  color:rgba(255,255,255,.15);
+  letter-spacing:-.02em;
+}
+.carta-footer .logo-footer em{color:rgba(201,168,76,.3);font-style:italic}
+
+/* ── DIVISOR ── */
+.divisor{
+  display:flex;align-items:center;
+  gap:1rem;margin:2.5rem 0;
+  max-width:680px;margin-left:auto;margin-right:auto;
+}
+.divisor::before,.divisor::after{
+  content:'';flex:1;
+  height:1px;background:rgba(201,168,76,.25);
+}
+.divisor span{
+  font-size:.6rem;color:var(--oro);letter-spacing:.2em;
+}
+
+/* Alergenos */
+.alergenos{
+  max-width:680px;margin:2rem auto 0;
+  font-family:'Cormorant Garamond',serif;
+  font-size:.78rem;color:var(--gris);
+  text-align:center;font-style:italic;
+  line-height:1.6;
+}
+
+@media(max-width:500px){
+  .portada-marco{padding:2rem 1.5rem}
+  .combinado-precio{position:static;display:block;margin-top:.75rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ PORTADA ══ -->
+<section class="portada" id="portada">
+  <div class="portada-inner">
+    <p class="portada-pretitulo">Café Histórico · Patrimonio de A Estrada</p>
+    <div class="portada-marco">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:.7rem;letter-spacing:.3em;color:rgba(201,168,76,.6);text-transform:uppercase;margin-bottom:1rem">Porta do Sol</p>
+      <div class="portada-titulo">
+        Puerta<br>del Sol
+        <em>A Estrada</em>
+      </div>
+      <p class="portada-lugar">Galicia · España</p>
+    </div>
+    <p class="portada-lema">
+      "Un emigrante de Cuba,<br>
+      un barman de las estrellas,<br>
+      y un coctel que viajó desde La Habana<br>
+      hasta este rincón de Galicia."
+    </p>
+    <div class="portada-divider"><span>✦</span></div>
+    <a href="#carta" class="btn-carta">Ver la carta</a>
+    <p class="portada-anos">Desde 1920 · Más de un siglo de historia</p>
+  </div>
+</section>
+
+<!-- ══ HISTORIA ══ -->
+<section class="historia">
+  <div class="historia-inner">
+    <h2>La historia de este lugar</h2>
+    <p>
+      <strong>D. José Piñeiro</strong> volvió de Cuba a principios del siglo XX 
+      como tantos estradenses que emigraron buscando fortuna. Trajo consigo 
+      el arte de combinar licores aprendido en La Habana, y de paso por Madrid 
+      trabó amistad con <strong>Perico Chicote</strong>, "El Barman de las Estrellas" 
+      de la Gran Vía.
+    </p>
+    <p>
+      En este edificio de esquina — con ventanas en más de 300 grados y tres puertas 
+      que dan a dos calles y una plaza — fundó el <strong>Café Puerta del Sol</strong>. 
+      Durante casi un siglo fue el corazón de A Estrada: políticos, médicos, 
+      comerciantes y escritores, todos pasaron por esta barra.
+    </p>
+    <p>
+      Su joya secreta era el <strong>"Jai Alai"</strong> — un combinado que nació 
+      en 1924 en los frontones de La Habana, donde los pelotaris vascos eran 
+      estrellas. Vermut, ginebra, soda y hierba luisa del campo. 
+      Una receta que solo conocía su hija <strong>Elenita</strong>.
+    </p>
+    <p style="color:rgba(201,168,76,.6);font-size:.85rem;margin-top:1.5rem;letter-spacing:.08em">
+      Hoy recuperamos su memoria — y su carta.
+    </p>
+  </div>
+</section>
+
+<!-- ══ NAV CARTA ══ -->
+<nav class="nav-carta" id="carta">
+  <div class="nav-carta-inner">
+    <button class="nav-btn active" onclick="scrollTo('travesia')">La Travesía</button>
+    <button class="nav-btn" onclick="scrollTo('habana')">La Habana</button>
+    <button class="nav-btn" onclick="scrollTo('fronton')">El Frontón</button>
+    <button class="nav-btn" onclick="scrollTo('huerta')">De la Huerta</button>
+    <button class="nav-btn" onclick="scrollTo('vuelta')">De Vuelta</button>
+    <button class="nav-btn" onclick="scrollTo('barra')">La Barra</button>
+  </div>
+</nav>
+
+<!-- ══ I · LA TRAVESÍA ══ -->
+<section class="seccion" id="travesia">
+  <div class="sec-header">
+    <div class="sec-numero">I</div>
+    <div class="sec-tag">Para empezar</div>
+    <h2 class="sec-titulo">La Travesía</h2>
+    <p class="sec-historia">
+      Lo que se comía antes de embarcar. Los sabores de siempre, 
+      los de la tierra que se deja y a la que siempre se vuelve.
+    </p>
+  </div>
+
+  <div class="items">
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Aceitunas aliñás de la casa</p>
+        <p class="item-sub">Maceradas con naranja, tomillo y ajo</p>
+        <p class="item-historia">La misma receta que se servía en esta barra hace cien años</p>
+      </div>
+      <div class="item-precio">2,50 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Empanada gallega de atún</p>
+        <p class="item-sub">Masa casera, atún del Cantábrico, pimiento y cebolla</p>
+        <p class="item-historia">El pan de los que se iban. La ración del que regresa.</p>
+      </div>
+      <div class="item-precio">4,50 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Pan con tomate y anchoa del norte</p>
+        <p class="item-sub">Pan de masa madre, tomate de temporada, anchoa en aceite</p>
+      </div>
+      <div class="item-precio">5,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Pulpo á feira</p>
+        <p class="item-sub">Pulpo gallego, patata cachelo, pimentón de la Vera, aceite virgen</p>
+        <p class="item-historia">Galicia en un plato. Sin más explicación necesaria.</p>
+      </div>
+      <div class="item-precio">14,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Croquetas de jamón ibérico</p>
+        <p class="item-sub">Bechamel de mantequilla, jamón de bellota, rebozado fino</p>
+      </div>
+      <div class="item-precio">8,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Pimientos de Padrón</p>
+        <p class="item-sub">Fritos en aceite de oliva, sal en escamas</p>
+        <p class="item-historia">Los que pican y los que no — como la vida misma</p>
+      </div>
+      <div class="item-precio">6,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Zamburiñas á plancha</p>
+        <p class="item-sub">Vieiras pequeñas gallegas, mantequilla, ajo y perejil</p>
+      </div>
+      <div class="item-precio">10,00 €</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ II · LA HABANA ══ -->
+<section class="seccion" id="habana">
+  <div class="sec-header">
+    <div class="sec-numero">II</div>
+    <div class="sec-tag">El mar y el trópico</div>
+    <h2 class="sec-titulo">La Habana</h2>
+    <p class="sec-historia">
+      Lo que Piñeiro trajo de Cuba. El mar gallego con alma caribeña. 
+      Producto de aquí, técnica de allá.
+    </p>
+  </div>
+
+  <div class="items">
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Ceviche de vieira gallega</p>
+        <p class="item-sub">Leche de tigre cítrica, mango, cebolla morada, cilantro, chile suave</p>
+        <p class="item-historia">El mar gallego viajó hasta La Habana. Y volvió con esto.</p>
+      </div>
+      <div class="item-precio">14,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Tartar de atún rojo</p>
+        <p class="item-sub">Aguacate, lima, jengibre, sésamo tostado, salsa de soja</p>
+      </div>
+      <div class="item-precio">15,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Chipirones en su tinta</p>
+        <p class="item-sub">Tinta natural, arroz blanco jazmín, cebolla caramelizada</p>
+        <p class="item-historia">Mar negro sobre arroz blanco. Un clásico que no se toca.</p>
+      </div>
+      <div class="item-precio">13,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Merluza del Cantábrico al vapor</p>
+        <p class="item-sub">Salsa de mantequilla tostada, alcaparras, limón y algas</p>
+      </div>
+      <div class="item-precio">16,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Boquerones en vinagre estilo malagueño</p>
+        <p class="item-sub">Aceite virgen, ajo, perejil, vinagre de jerez</p>
+        <p class="item-historia">Piñeiro los comió en Málaga de camino a Madrid. Nunca los olvidó.</p>
+      </div>
+      <div class="item-precio">8,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Arroz negro con sepia y alioli</p>
+        <p class="item-sub">Arroz bomba, sepia gallega, alioli de ajo negro</p>
+      </div>
+      <div class="item-precio">15,00 €</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ III · EL FRONTÓN ══ -->
+<section class="seccion" id="fronton">
+  <div class="sec-header">
+    <div class="sec-numero">III</div>
+    <div class="sec-tag">Carnes y contundentes</div>
+    <h2 class="sec-titulo">El Frontón</h2>
+    <p class="sec-historia">
+      Lo que comían los pelotaris vascos en La Habana — carne de verdad, 
+      sin artificios. El norte que aterriza en Galicia.
+    </p>
+  </div>
+
+  <div class="items">
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Chuletón de ternera gallega</p>
+        <p class="item-sub">A la brasa, sal de Añana, pimientos de Padrón, patatas</p>
+        <p class="item-historia">La ternera rubia gallega. La mejor del mundo, sin discusión.</p>
+      </div>
+      <div class="item-precio">28,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Churrasco de ternera con mojo</p>
+        <p class="item-sub">Ternera gallega a la brasa, mojo picón canario, patatas fritas</p>
+        <p class="item-historia">El Atlántico en un plato — Galicia, Cuba y Canarias juntos</p>
+      </div>
+      <div class="item-precio">16,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Secreto ibérico a la plancha</p>
+        <p class="item-sub">Con pimientos asados y patatas panaderas</p>
+      </div>
+      <div class="item-precio">14,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Txistorra con huevo roto</p>
+        <p class="item-sub">Txistorra vasca, huevo de corral frito, patatas paja</p>
+        <p class="item-historia">Lo que pedían los pelotaris en el frontón de La Habana los domingos</p>
+      </div>
+      <div class="item-precio">11,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Carne mechá de cerdo ibérico</p>
+        <p class="item-sub">Cocción lenta 8 horas, caldo de huesos, patata torneada</p>
+        <p class="item-historia">El guiso de los que tenían paciencia. Y buen producto.</p>
+      </div>
+      <div class="item-precio">13,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Cocido gallego de la casa</p>
+        <p class="item-sub">Berza, cachelos, chorizo, lacón y tocino — solo en temporada</p>
+        <p class="item-historia">Solo disponible de octubre a marzo. Como manda la tradición.</p>
+      </div>
+      <div class="item-precio">16,00 €</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ IV · DE LA HUERTA ══ -->
+<section class="seccion" id="huerta">
+  <div class="sec-header">
+    <div class="sec-numero">IV</div>
+    <div class="sec-tag">Ensaladas y verduras</div>
+    <h2 class="sec-titulo">De la Huerta</h2>
+    <p class="sec-historia">
+      Lo que crecía en A Baiuca, el campo del que venía la hierba luisa 
+      de Ismael para enriquecer el Jai Alai.
+    </p>
+  </div>
+
+  <div class="items">
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Ensalada de temporada</p>
+        <p class="item-sub">Producto de huerta local, tomate, pepino, cebolleta, vinagreta de Jerez</p>
+      </div>
+      <div class="item-precio">7,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Ensalada César con pollo asado</p>
+        <p class="item-sub">Pollo de corral, picatostes caseros, parmesano, anchoa</p>
+      </div>
+      <div class="item-precio">11,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Tomate con burrata y albahaca</p>
+        <p class="item-sub">Tomate corazón de buey, burrata fresca, aceite de albahaca</p>
+        <p class="item-historia">Solo en temporada de tomate — julio a septiembre</p>
+      </div>
+      <div class="item-precio">10,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Grelos salteados con lacón</p>
+        <p class="item-sub">Grelos de temporada, aceite de ajo, lacón deshilachado</p>
+        <p class="item-historia">Galicia pura. Sin trampa ni cartón.</p>
+      </div>
+      <div class="item-precio">8,00 €</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ V · DE VUELTA A CASA ══ -->
+<section class="seccion" id="vuelta">
+  <div class="sec-header">
+    <div class="sec-numero">V</div>
+    <div class="sec-tag">Postres</div>
+    <h2 class="sec-titulo">De Vuelta a Casa</h2>
+    <p class="sec-historia">
+      Lo que te recuerda a alguien. El final del viaje. 
+      Nada inventado, todo sentido.
+    </p>
+  </div>
+
+  <div class="items">
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Tarta de Santiago</p>
+        <p class="item-sub">Almendra, huevo y azúcar. La receta de siempre.</p>
+        <p class="item-historia">El postre del peregrino. Y del que ya llegó.</p>
+      </div>
+      <div class="item-precio">5,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Filloas con crema y miel</p>
+        <p class="item-sub">Filloas gallegas, crema pastelera, miel del Ulla</p>
+        <p class="item-historia">Las hacía la abuela. Las hacemos nosotros.</p>
+      </div>
+      <div class="item-precio">5,50 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Tocino de cielo</p>
+        <p class="item-sub">Yema cuajada, caramelo oscuro — receta de convento</p>
+      </div>
+      <div class="item-precio">4,50 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Mousse de chocolate negro</p>
+        <p class="item-sub">Chocolate 70%, flor de sal, aceite virgen extra</p>
+      </div>
+      <div class="item-precio">5,00 €</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <p class="item-nombre">Queso do país con membrillo</p>
+        <p class="item-sub">Selección de quesos gallegos, membrillo casero, nueces</p>
+      </div>
+      <div class="item-precio">8,00 €</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ VI · LA BARRA DE PIÑEIRO ══ -->
+<section class="seccion" id="barra" style="background:var(--marino-d)">
+  <div class="sec-header">
+    <div class="sec-numero" style="color:rgba(201,168,76,.08)">VI</div>
+    <div class="sec-tag" style="color:var(--oro-l)">Cócteles & combinados</div>
+    <h2 class="sec-titulo" style="color:#fff">La Barra de Piñeiro</h2>
+    <p class="sec-historia" style="color:rgba(255,255,255,.5)">
+      Los combinados que hicieron famosa esta barra. 
+      Recuperados de las notas que Piñeiro confió a su hija Elenita, 
+      que las guardó durante décadas en un cajón de esta misma barra.
+    </p>
+  </div>
+
+  <div style="max-width:680px;margin:0 auto">
+
+    <div class="combinado-card">
+      <div class="combinado-nombre">El Jai Alai</div>
+      <div class="combinado-ingredientes">Vermut rojo · Ginebra · Soda · Hierba luisa de A Baiuca</div>
+      <div class="combinado-historia">
+        Nació en 1924 en la barra del frontón de La Habana, donde los pelotaris vascos 
+        eran estrellas. "Jai Alai" en euskera significa "fiesta alegre" — y "cesta punta". 
+        Piñeiro lo trajo de Cuba. Solo Elenita conocía la dosis exacta.
+        El secreto mejor guardado de A Estrada durante casi un siglo.
+      </div>
+      <div class="combinado-precio">8,00 €</div>
+    </div>
+
+    <div class="combinado-card">
+      <div class="combinado-nombre">El Delacalle</div>
+      <div class="combinado-ingredientes">Agua con gas · Limón · Menta fresca · Jarabe de agave · Lima</div>
+      <div class="combinado-historia">
+        Lo creó Piñeiro especialmente para el Doctor Manuel de la Calle, 
+        que no bebía alcohol. Tuvo tanto éxito entre el resto de la clientela 
+        que acabó siendo tan pedido como el Jai Alai.
+      </div>
+      <div class="combinado-precio">5,00 €</div>
+    </div>
+
+    <div class="combinado-card">
+      <div class="combinado-nombre">El Pelotari</div>
+      <div class="combinado-ingredientes">Ron añejo · Zumo de naranja natural · Angostura · Piel de naranja</div>
+      <div class="combinado-historia">
+        Lo que bebían los vascos en La Habana cuando ganaban. 
+        Ron cubano, cítrico gallego. Dos mundos en un vaso.
+      </div>
+      <div class="combinado-precio">9,00 €</div>
+    </div>
+
+    <div class="combinado-card">
+      <div class="combinado-nombre">El Enriquiño</div>
+      <div class="combinado-ingredientes">Vermut blanco · Licor 43 · Soda de limón · Aceitunas manzanilla</div>
+      <div class="combinado-historia">
+        En honor a los Hermanos Vázquez Esmoris — los "Enriquiños" — 
+        propietarios históricos de este edificio que alojó el Café Puerta del Sol 
+        durante casi un siglo. El combinado de la casa.
+      </div>
+      <div class="combinado-precio">8,00 €</div>
+    </div>
+
+    <div class="divisor" style="border-color:rgba(201,168,76,.15)">
+      <span style="color:rgba(201,168,76,.4)">◆</span>
+    </div>
+
+    <!-- Vinos y bebidas -->
+    <div style="margin-top:1rem">
+      <div class="item" style="border-bottom-color:rgba(255,255,255,.08)">
+        <div class="item-left">
+          <p class="item-nombre" style="color:var(--oro-l)">Albariño Rías Baixas</p>
+          <p class="item-sub" style="color:rgba(255,255,255,.45)">Copa · Fresco y atlántico</p>
+        </div>
+        <div class="item-precio">3,50 €</div>
+      </div>
+      <div class="item" style="border-bottom-color:rgba(255,255,255,.08)">
+        <div class="item-left">
+          <p class="item-nombre" style="color:var(--oro-l)">Mencía Ribeira Sacra</p>
+          <p class="item-sub" style="color:rgba(255,255,255,.45)">Copa · Mineral y frutal</p>
+        </div>
+        <div class="item-precio">3,50 €</div>
+      </div>
+      <div class="item" style="border-bottom-color:rgba(255,255,255,.08)">
+        <div class="item-left">
+          <p class="item-nombre" style="color:var(--oro-l)">Orujo de hierbas gallego</p>
+          <p class="item-sub" style="color:rgba(255,255,255,.45)">Chupito · Digestivo de la casa</p>
+        </div>
+        <div class="item-precio">2,50 €</div>
+      </div>
+      <div class="item" style="border-bottom-color:rgba(255,255,255,.08)">
+        <div class="item-left">
+          <p class="item-nombre" style="color:var(--oro-l)">Café de puchero</p>
+          <p class="item-sub" style="color:rgba(255,255,255,.45)">Como lo hacía Elenita — con la cafetera de mango y brazo</p>
+        </div>
+        <div class="item-precio">1,80 €</div>
+      </div>
+    </div>
+
+    <p class="alergenos" style="color:rgba(255,255,255,.25);margin-top:2.5rem">
+      Si tienes alguna alergia o intolerancia, consúltanos antes de pedir.<br>
+      Productos de temporada sujetos a disponibilidad. Precios IVA incluido.
+    </p>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="carta-footer">
+  <p>
+    "Así que el Jai Alai, el esparadrapo, el Delacalle, 
+    los cacahuetes, las aceitunas con hueso y los trocitos de pan 
+    untados con aquella salsa naranja cubrían todas las necesidades 
+    de las mañanas del Puerta del Sol."
+  </p>
+  <p style="font-size:.75rem;color:rgba(255,255,255,.25);margin-bottom:2rem">
+    — Ricardo Terceiro, "Historias do Adoquín", 2022
+  </p>
+  <div class="logo-footer">Puerta <em>del Sol</em></div>
+  <p style="font-size:.7rem;margin-top:1rem;letter-spacing:.15em">
+    A ESTRADA · GALICIA
+  </p>
+</footer>
+
+<script>
+function scrollTo(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Activar nav según scroll
+const secciones = ['travesia','habana','fronton','huerta','vuelta','barra'];
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const idx = secciones.indexOf(e.target.id);
+      if(idx>=0){
+        document.querySelectorAll('.nav-btn').forEach((b,i)=>{
+          b.classList.toggle('active',i===idx);
+        });
+      }
+    }
+  });
+},{threshold:.3});
+secciones.forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) observer.observe(el);
+});
+</script>
+</body>
+</html>
