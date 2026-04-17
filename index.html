@@ -1,924 +1,428 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café Puerta del Sol · A Estrada</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estrategia WhatsLoyalty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
 
-:root{
-  --marino:  #1B2A4A;
-  --marino-d:#0f1a2e;
-  --oro:     #C9A84C;
-  --oro-l:   #E8C97A;
-  --crema:   #F7F3EC;
-  --crema2:  #EDE7D9;
-  --terrac:  #B85C38;
-  --texto:   #2C1F14;
-  --gris:    #7a7060;
-}
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
 
-html{scroll-behavior:smooth}
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
 
-body{
-  font-family:'EB Garamond',Georgia,serif;
-  background:var(--crema);
-  color:var(--texto);
-  overflow-x:hidden;
-}
+        .tab-btn.active {
+            border-bottom-width: 4px;
+            border-color: #22c55e;
+            color: #16a34a;
+            font-weight: 600;
+        }
 
-/* ── PORTADA ── */
-.portada{
-  min-height:100vh;
-  background:var(--marino-d);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  position:relative;
-  overflow:hidden;
-  padding:2rem;
-}
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #22c55e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
 
-.portada::before{
-  content:'';
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse at 20% 50%, rgba(201,168,76,.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 30%, rgba(184,92,56,.06) 0%, transparent 50%);
-}
+        .step-card:hover .step-circle {
+            transform: scale(1.1);
+        }
 
-/* Patrón de azulejos sutil en esquinas */
-.portada::after{
-  content:'';
-  position:absolute;inset:0;
-  background-image:
-    repeating-linear-gradient(45deg, rgba(201,168,76,.04) 0px, rgba(201,168,76,.04) 1px, transparent 1px, transparent 20px),
-    repeating-linear-gradient(-45deg, rgba(201,168,76,.04) 0px, rgba(201,168,76,.04) 1px, transparent 1px, transparent 20px);
-  pointer-events:none;
-}
+        .benefit-card {
+            transition: all 0.3s ease;
+        }
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            border-color: #22c55e;
+        }
 
-.portada-inner{
-  position:relative;z-index:2;
-  text-align:center;
-  max-width:520px;
-}
-
-.portada-pretitulo{
-  font-family:'Cormorant Garamond',serif;
-  font-size:.8rem;
-  font-weight:300;
-  letter-spacing:.35em;
-  text-transform:uppercase;
-  color:var(--oro);
-  margin-bottom:2rem;
-}
-
-.portada-marco{
-  border:1px solid rgba(201,168,76,.4);
-  padding:2.5rem 3rem;
-  position:relative;
-  margin-bottom:2rem;
-}
-.portada-marco::before,.portada-marco::after{
-  content:'◆';
-  position:absolute;
-  font-size:.6rem;
-  color:var(--oro);
-}
-.portada-marco::before{top:.6rem;left:.6rem}
-.portada-marco::after{bottom:.6rem;right:.6rem}
-
-.portada-titulo{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2.8rem,8vw,4.5rem);
-  font-weight:900;
-  color:#fff;
-  line-height:1;
-  letter-spacing:-.02em;
-  margin-bottom:.5rem;
-}
-.portada-titulo em{
-  font-style:italic;
-  color:var(--oro);
-  display:block;
-  font-size:.6em;
-  font-weight:400;
-  letter-spacing:.05em;
-}
-
-.portada-lugar{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1rem;
-  color:rgba(255,255,255,.5);
-  letter-spacing:.2em;
-  text-transform:uppercase;
-  margin-top:1rem;
-}
-
-.portada-lema{
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;
-  font-size:1.1rem;
-  color:rgba(255,255,255,.6);
-  line-height:1.6;
-  margin-bottom:2.5rem;
-}
-
-.portada-divider{
-  display:flex;align-items:center;gap:1rem;
-  margin:1.5rem 0;
-}
-.portada-divider::before,.portada-divider::after{
-  content:'';flex:1;
-  height:1px;background:rgba(201,168,76,.3);
-}
-.portada-divider span{
-  font-size:.7rem;color:var(--oro);letter-spacing:.2em;
-}
-
-.btn-carta{
-  display:inline-block;
-  background:var(--oro);
-  color:var(--marino-d);
-  font-family:'Cormorant Garamond',serif;
-  font-size:1rem;
-  font-weight:600;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  padding:.9rem 2.5rem;
-  text-decoration:none;
-  border:none;cursor:pointer;
-  transition:background .2s,transform .2s;
-}
-.btn-carta:hover{background:var(--oro-l);transform:translateY(-2px)}
-
-.portada-anos{
-  font-family:'Cormorant Garamond',serif;
-  font-size:.75rem;
-  color:rgba(255,255,255,.3);
-  letter-spacing:.15em;
-  text-transform:uppercase;
-  margin-top:2rem;
-}
-
-/* ── HISTORIA INTRO ── */
-.historia{
-  background:var(--marino);
-  padding:5rem 1.5rem;
-  text-align:center;
-  position:relative;
-}
-.historia::before{
-  content:'1920 — 2024';
-  position:absolute;
-  top:2rem;left:50%;transform:translateX(-50%);
-  font-family:'Cormorant Garamond',serif;
-  font-size:.7rem;color:rgba(201,168,76,.4);
-  letter-spacing:.3em;text-transform:uppercase;
-}
-.historia-inner{max-width:640px;margin:0 auto}
-.historia h2{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(1.6rem,4vw,2.4rem);
-  font-weight:400;font-style:italic;
-  color:var(--oro);
-  margin-bottom:2rem;
-}
-.historia p{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.1rem;font-weight:300;
-  color:rgba(255,255,255,.7);
-  line-height:1.9;margin-bottom:1rem;
-}
-.historia strong{color:var(--oro-l);font-weight:600}
-
-/* ── NAV CARTA ── */
-.nav-carta{
-  position:sticky;top:0;z-index:50;
-  background:var(--marino-d);
-  border-bottom:1px solid rgba(201,168,76,.2);
-  padding:.75rem 1.5rem;
-  overflow-x:auto;
-  white-space:nowrap;
-  scrollbar-width:none;
-}
-.nav-carta::-webkit-scrollbar{display:none}
-.nav-carta-inner{
-  display:inline-flex;gap:0;
-  min-width:100%;justify-content:center;
-}
-.nav-btn{
-  font-family:'Cormorant Garamond',serif;
-  font-size:.78rem;font-weight:600;
-  letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(255,255,255,.5);
-  background:none;border:none;cursor:pointer;
-  padding:.5rem 1rem;
-  border-right:1px solid rgba(201,168,76,.15);
-  transition:color .2s;
-  white-space:nowrap;
-}
-.nav-btn:last-child{border-right:none}
-.nav-btn:hover,.nav-btn.active{color:var(--oro)}
-
-/* ── SECCIONES CARTA ── */
-.seccion{
-  padding:4rem 1.5rem;
-  border-bottom:1px solid rgba(0,0,0,.06);
-}
-.seccion:nth-child(even){background:var(--crema2)}
-.seccion:nth-child(odd){background:var(--crema)}
-
-.sec-header{
-  text-align:center;
-  margin-bottom:3rem;
-  position:relative;
-}
-.sec-numero{
-  font-family:'Playfair Display',serif;
-  font-size:4rem;font-weight:900;
-  color:rgba(201,168,76,.12);
-  line-height:1;
-  position:absolute;
-  top:-1rem;left:50%;transform:translateX(-50%);
-  pointer-events:none;
-  white-space:nowrap;
-}
-.sec-tag{
-  font-family:'Cormorant Garamond',serif;
-  font-size:.72rem;font-weight:600;
-  letter-spacing:.25em;text-transform:uppercase;
-  color:var(--terrac);
-  margin-bottom:.75rem;
-  display:flex;align-items:center;justify-content:center;gap:.75rem;
-}
-.sec-tag::before,.sec-tag::after{
-  content:'';width:30px;height:1px;background:var(--terrac);
-}
-.sec-titulo{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(1.8rem,5vw,2.8rem);
-  font-weight:700;
-  color:var(--marino);
-  line-height:1.1;
-  margin-bottom:.75rem;
-}
-.sec-historia{
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;
-  font-size:1rem;
-  color:var(--gris);
-  line-height:1.7;
-  max-width:520px;
-  margin:0 auto;
-}
-
-/* ── ITEMS CARTA ── */
-.items{
-  max-width:680px;margin:0 auto;
-  display:flex;flex-direction:column;gap:0;
-}
-.item{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:1rem;
-  padding:1.4rem 0;
-  border-bottom:1px solid rgba(0,0,0,.07);
-  align-items:start;
-  transition:background .15s;
-}
-.item:last-child{border-bottom:none}
-.item:hover{background:rgba(201,168,76,.04);margin:0 -1rem;padding-left:1rem;padding-right:1rem}
-.item-left{}
-.item-nombre{
-  font-family:'Playfair Display',serif;
-  font-size:1rem;font-weight:700;
-  color:var(--marino);
-  text-transform:uppercase;
-  letter-spacing:.04em;
-  margin-bottom:.2rem;
-}
-.item-sub{
-  font-family:'Cormorant Garamond',serif;
-  font-size:.92rem;font-weight:300;
-  color:var(--gris);
-  font-style:italic;
-  line-height:1.4;
-  margin-bottom:.3rem;
-}
-.item-historia{
-  font-family:'Cormorant Garamond',serif;
-  font-size:.78rem;
-  color:rgba(184,92,56,.7);
-  font-style:italic;
-  line-height:1.4;
-}
-.item-precio{
-  font-family:'Playfair Display',serif;
-  font-size:1.05rem;font-weight:700;
-  color:var(--terrac);
-  white-space:nowrap;
-  padding-top:.1rem;
-}
-
-/* ── COMBINADOS (diseño especial) ── */
-.combinado-card{
-  background:var(--marino);
-  border:1px solid rgba(201,168,76,.25);
-  border-radius:2px;
-  padding:1.75rem;
-  margin-bottom:1rem;
-  position:relative;
-  overflow:hidden;
-}
-.combinado-card::before{
-  content:'';
-  position:absolute;top:0;left:0;
-  width:3px;height:100%;
-  background:var(--oro);
-}
-.combinado-nombre{
-  font-family:'Playfair Display',serif;
-  font-size:1.3rem;font-weight:700;font-style:italic;
-  color:var(--oro);
-  margin-bottom:.4rem;
-}
-.combinado-ingredientes{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1rem;font-weight:300;
-  color:rgba(255,255,255,.75);
-  margin-bottom:.5rem;
-  font-style:italic;
-}
-.combinado-historia{
-  font-family:'Cormorant Garamond',serif;
-  font-size:.82rem;
-  color:rgba(255,255,255,.45);
-  line-height:1.6;
-  font-style:italic;
-}
-.combinado-precio{
-  position:absolute;top:1.75rem;right:1.75rem;
-  font-family:'Playfair Display',serif;
-  font-size:1.1rem;font-weight:700;
-  color:var(--oro);
-}
-
-/* ── FOOTER ── */
-.carta-footer{
-  background:var(--marino-d);
-  padding:4rem 1.5rem;
-  text-align:center;
-}
-.carta-footer p{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1rem;font-weight:300;font-style:italic;
-  color:rgba(255,255,255,.4);
-  line-height:1.8;
-  max-width:480px;margin:0 auto 1.5rem;
-}
-.carta-footer .logo-footer{
-  font-family:'Playfair Display',serif;
-  font-size:1.8rem;font-weight:900;
-  color:rgba(255,255,255,.15);
-  letter-spacing:-.02em;
-}
-.carta-footer .logo-footer em{color:rgba(201,168,76,.3);font-style:italic}
-
-/* ── DIVISOR ── */
-.divisor{
-  display:flex;align-items:center;
-  gap:1rem;margin:2.5rem 0;
-  max-width:680px;margin-left:auto;margin-right:auto;
-}
-.divisor::before,.divisor::after{
-  content:'';flex:1;
-  height:1px;background:rgba(201,168,76,.25);
-}
-.divisor span{
-  font-size:.6rem;color:var(--oro);letter-spacing:.2em;
-}
-
-/* Alergenos */
-.alergenos{
-  max-width:680px;margin:2rem auto 0;
-  font-family:'Cormorant Garamond',serif;
-  font-size:.78rem;color:var(--gris);
-  text-align:center;font-style:italic;
-  line-height:1.6;
-}
-
-@media(max-width:500px){
-  .portada-marco{padding:2rem 1.5rem}
-  .combinado-precio{position:static;display:block;margin-top:.75rem}
-}
-</style>
+        .vip-highlight {
+            border-left: 4px solid #22c55e;
+            background: linear-gradient(to right, #f0fdf4, #ffffff);
+        }
+    </style>
 </head>
-<body>
+<body class="antialiased flex flex-col min-h-screen">
 
-<!-- ══ PORTADA ══ -->
-<section class="portada" id="portada">
-  <div class="portada-inner">
-    <p class="portada-pretitulo">Café Histórico · Patrimonio de A Estrada</p>
-    <div class="portada-marco">
-      <p style="font-family:'Cormorant Garamond',serif;font-size:.7rem;letter-spacing:.3em;color:rgba(201,168,76,.6);text-transform:uppercase;margin-bottom:1rem">Porta do Sol</p>
-      <div class="portada-titulo">
-        Puerta<br>del Sol
-        <em>A Estrada</em>
-      </div>
-      <p class="portada-lugar">Galicia · España</p>
-    </div>
-    <p class="portada-lema">
-      "Un emigrante de Cuba,<br>
-      un barman de las estrellas,<br>
-      y un coctel que viajó desde La Habana<br>
-      hasta este rincón de Galicia."
-    </p>
-    <div class="portada-divider"><span>✦</span></div>
-    <a href="#carta" class="btn-carta">Ver la carta</a>
-    <p class="portada-anos">Desde 1920 · Más de un siglo de historia</p>
-  </div>
-</section>
-
-<!-- ══ HISTORIA ══ -->
-<section class="historia">
-  <div class="historia-inner">
-    <h2>La historia de este lugar</h2>
-    <p>
-      <strong>D. José Piñeiro</strong> volvió de Cuba a principios del siglo XX 
-      como tantos estradenses que emigraron buscando fortuna. Trajo consigo 
-      el arte de combinar licores aprendido en La Habana, y de paso por Madrid 
-      trabó amistad con <strong>Perico Chicote</strong>, "El Barman de las Estrellas" 
-      de la Gran Vía.
-    </p>
-    <p>
-      En este edificio de esquina — con ventanas en más de 300 grados y tres puertas 
-      que dan a dos calles y una plaza — fundó el <strong>Café Puerta del Sol</strong>. 
-      Durante casi un siglo fue el corazón de A Estrada: políticos, médicos, 
-      comerciantes y escritores, todos pasaron por esta barra.
-    </p>
-    <p>
-      Su joya secreta era el <strong>"Jai Alai"</strong> — un combinado que nació 
-      en 1924 en los frontones de La Habana, donde los pelotaris vascos eran 
-      estrellas. Vermut, ginebra, soda y hierba luisa del campo. 
-      Una receta que solo conocía su hija <strong>Elenita</strong>.
-    </p>
-    <p style="color:rgba(201,168,76,.6);font-size:.85rem;margin-top:1.5rem;letter-spacing:.08em">
-      Hoy recuperamos su memoria — y su carta.
-    </p>
-  </div>
-</section>
-
-<!-- ══ NAV CARTA ══ -->
-<nav class="nav-carta" id="carta">
-  <div class="nav-carta-inner">
-    <button class="nav-btn active" onclick="scrollTo('travesia')">La Travesía</button>
-    <button class="nav-btn" onclick="scrollTo('habana')">La Habana</button>
-    <button class="nav-btn" onclick="scrollTo('fronton')">El Frontón</button>
-    <button class="nav-btn" onclick="scrollTo('huerta')">De la Huerta</button>
-    <button class="nav-btn" onclick="scrollTo('vuelta')">De Vuelta</button>
-    <button class="nav-btn" onclick="scrollTo('barra')">La Barra</button>
-  </div>
-</nav>
-
-<!-- ══ I · LA TRAVESÍA ══ -->
-<section class="seccion" id="travesia">
-  <div class="sec-header">
-    <div class="sec-numero">I</div>
-    <div class="sec-tag">Para empezar</div>
-    <h2 class="sec-titulo">La Travesía</h2>
-    <p class="sec-historia">
-      Lo que se comía antes de embarcar. Los sabores de siempre, 
-      los de la tierra que se deja y a la que siempre se vuelve.
-    </p>
-  </div>
-
-  <div class="items">
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Aceitunas aliñás de la casa</p>
-        <p class="item-sub">Maceradas con naranja, tomillo y ajo</p>
-        <p class="item-historia">La misma receta que se servía en esta barra hace cien años</p>
-      </div>
-      <div class="item-precio">2,50 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Empanada gallega de atún</p>
-        <p class="item-sub">Masa casera, atún del Cantábrico, pimiento y cebolla</p>
-        <p class="item-historia">El pan de los que se iban. La ración del que regresa.</p>
-      </div>
-      <div class="item-precio">4,50 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Pan con tomate y anchoa del norte</p>
-        <p class="item-sub">Pan de masa madre, tomate de temporada, anchoa en aceite</p>
-      </div>
-      <div class="item-precio">5,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Pulpo á feira</p>
-        <p class="item-sub">Pulpo gallego, patata cachelo, pimentón de la Vera, aceite virgen</p>
-        <p class="item-historia">Galicia en un plato. Sin más explicación necesaria.</p>
-      </div>
-      <div class="item-precio">14,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Croquetas de jamón ibérico</p>
-        <p class="item-sub">Bechamel de mantequilla, jamón de bellota, rebozado fino</p>
-      </div>
-      <div class="item-precio">8,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Pimientos de Padrón</p>
-        <p class="item-sub">Fritos en aceite de oliva, sal en escamas</p>
-        <p class="item-historia">Los que pican y los que no — como la vida misma</p>
-      </div>
-      <div class="item-precio">6,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Zamburiñas á plancha</p>
-        <p class="item-sub">Vieiras pequeñas gallegas, mantequilla, ajo y perejil</p>
-      </div>
-      <div class="item-precio">10,00 €</div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ II · LA HABANA ══ -->
-<section class="seccion" id="habana">
-  <div class="sec-header">
-    <div class="sec-numero">II</div>
-    <div class="sec-tag">El mar y el trópico</div>
-    <h2 class="sec-titulo">La Habana</h2>
-    <p class="sec-historia">
-      Lo que Piñeiro trajo de Cuba. El mar gallego con alma caribeña. 
-      Producto de aquí, técnica de allá.
-    </p>
-  </div>
-
-  <div class="items">
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Ceviche de vieira gallega</p>
-        <p class="item-sub">Leche de tigre cítrica, mango, cebolla morada, cilantro, chile suave</p>
-        <p class="item-historia">El mar gallego viajó hasta La Habana. Y volvió con esto.</p>
-      </div>
-      <div class="item-precio">14,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Tartar de atún rojo</p>
-        <p class="item-sub">Aguacate, lima, jengibre, sésamo tostado, salsa de soja</p>
-      </div>
-      <div class="item-precio">15,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Chipirones en su tinta</p>
-        <p class="item-sub">Tinta natural, arroz blanco jazmín, cebolla caramelizada</p>
-        <p class="item-historia">Mar negro sobre arroz blanco. Un clásico que no se toca.</p>
-      </div>
-      <div class="item-precio">13,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Merluza del Cantábrico al vapor</p>
-        <p class="item-sub">Salsa de mantequilla tostada, alcaparras, limón y algas</p>
-      </div>
-      <div class="item-precio">16,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Boquerones en vinagre estilo malagueño</p>
-        <p class="item-sub">Aceite virgen, ajo, perejil, vinagre de jerez</p>
-        <p class="item-historia">Piñeiro los comió en Málaga de camino a Madrid. Nunca los olvidó.</p>
-      </div>
-      <div class="item-precio">8,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Arroz negro con sepia y alioli</p>
-        <p class="item-sub">Arroz bomba, sepia gallega, alioli de ajo negro</p>
-      </div>
-      <div class="item-precio">15,00 €</div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ III · EL FRONTÓN ══ -->
-<section class="seccion" id="fronton">
-  <div class="sec-header">
-    <div class="sec-numero">III</div>
-    <div class="sec-tag">Carnes y contundentes</div>
-    <h2 class="sec-titulo">El Frontón</h2>
-    <p class="sec-historia">
-      Lo que comían los pelotaris vascos en La Habana — carne de verdad, 
-      sin artificios. El norte que aterriza en Galicia.
-    </p>
-  </div>
-
-  <div class="items">
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Chuletón de ternera gallega</p>
-        <p class="item-sub">A la brasa, sal de Añana, pimientos de Padrón, patatas</p>
-        <p class="item-historia">La ternera rubia gallega. La mejor del mundo, sin discusión.</p>
-      </div>
-      <div class="item-precio">28,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Churrasco de ternera con mojo</p>
-        <p class="item-sub">Ternera gallega a la brasa, mojo picón canario, patatas fritas</p>
-        <p class="item-historia">El Atlántico en un plato — Galicia, Cuba y Canarias juntos</p>
-      </div>
-      <div class="item-precio">16,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Secreto ibérico a la plancha</p>
-        <p class="item-sub">Con pimientos asados y patatas panaderas</p>
-      </div>
-      <div class="item-precio">14,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Txistorra con huevo roto</p>
-        <p class="item-sub">Txistorra vasca, huevo de corral frito, patatas paja</p>
-        <p class="item-historia">Lo que pedían los pelotaris en el frontón de La Habana los domingos</p>
-      </div>
-      <div class="item-precio">11,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Carne mechá de cerdo ibérico</p>
-        <p class="item-sub">Cocción lenta 8 horas, caldo de huesos, patata torneada</p>
-        <p class="item-historia">El guiso de los que tenían paciencia. Y buen producto.</p>
-      </div>
-      <div class="item-precio">13,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Cocido gallego de la casa</p>
-        <p class="item-sub">Berza, cachelos, chorizo, lacón y tocino — solo en temporada</p>
-        <p class="item-historia">Solo disponible de octubre a marzo. Como manda la tradición.</p>
-      </div>
-      <div class="item-precio">16,00 €</div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ IV · DE LA HUERTA ══ -->
-<section class="seccion" id="huerta">
-  <div class="sec-header">
-    <div class="sec-numero">IV</div>
-    <div class="sec-tag">Ensaladas y verduras</div>
-    <h2 class="sec-titulo">De la Huerta</h2>
-    <p class="sec-historia">
-      Lo que crecía en A Baiuca, el campo del que venía la hierba luisa 
-      de Ismael para enriquecer el Jai Alai.
-    </p>
-  </div>
-
-  <div class="items">
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Ensalada de temporada</p>
-        <p class="item-sub">Producto de huerta local, tomate, pepino, cebolleta, vinagreta de Jerez</p>
-      </div>
-      <div class="item-precio">7,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Ensalada César con pollo asado</p>
-        <p class="item-sub">Pollo de corral, picatostes caseros, parmesano, anchoa</p>
-      </div>
-      <div class="item-precio">11,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Tomate con burrata y albahaca</p>
-        <p class="item-sub">Tomate corazón de buey, burrata fresca, aceite de albahaca</p>
-        <p class="item-historia">Solo en temporada de tomate — julio a septiembre</p>
-      </div>
-      <div class="item-precio">10,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Grelos salteados con lacón</p>
-        <p class="item-sub">Grelos de temporada, aceite de ajo, lacón deshilachado</p>
-        <p class="item-historia">Galicia pura. Sin trampa ni cartón.</p>
-      </div>
-      <div class="item-precio">8,00 €</div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ V · DE VUELTA A CASA ══ -->
-<section class="seccion" id="vuelta">
-  <div class="sec-header">
-    <div class="sec-numero">V</div>
-    <div class="sec-tag">Postres</div>
-    <h2 class="sec-titulo">De Vuelta a Casa</h2>
-    <p class="sec-historia">
-      Lo que te recuerda a alguien. El final del viaje. 
-      Nada inventado, todo sentido.
-    </p>
-  </div>
-
-  <div class="items">
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Tarta de Santiago</p>
-        <p class="item-sub">Almendra, huevo y azúcar. La receta de siempre.</p>
-        <p class="item-historia">El postre del peregrino. Y del que ya llegó.</p>
-      </div>
-      <div class="item-precio">5,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Filloas con crema y miel</p>
-        <p class="item-sub">Filloas gallegas, crema pastelera, miel del Ulla</p>
-        <p class="item-historia">Las hacía la abuela. Las hacemos nosotros.</p>
-      </div>
-      <div class="item-precio">5,50 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Tocino de cielo</p>
-        <p class="item-sub">Yema cuajada, caramelo oscuro — receta de convento</p>
-      </div>
-      <div class="item-precio">4,50 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Mousse de chocolate negro</p>
-        <p class="item-sub">Chocolate 70%, flor de sal, aceite virgen extra</p>
-      </div>
-      <div class="item-precio">5,00 €</div>
-    </div>
-    <div class="item">
-      <div class="item-left">
-        <p class="item-nombre">Queso do país con membrillo</p>
-        <p class="item-sub">Selección de quesos gallegos, membrillo casero, nueces</p>
-      </div>
-      <div class="item-precio">8,00 €</div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ VI · LA BARRA DE PIÑEIRO ══ -->
-<section class="seccion" id="barra" style="background:var(--marino-d)">
-  <div class="sec-header">
-    <div class="sec-numero" style="color:rgba(201,168,76,.08)">VI</div>
-    <div class="sec-tag" style="color:var(--oro-l)">Cócteles & combinados</div>
-    <h2 class="sec-titulo" style="color:#fff">La Barra de Piñeiro</h2>
-    <p class="sec-historia" style="color:rgba(255,255,255,.5)">
-      Los combinados que hicieron famosa esta barra. 
-      Recuperados de las notas que Piñeiro confió a su hija Elenita, 
-      que las guardó durante décadas en un cajón de esta misma barra.
-    </p>
-  </div>
-
-  <div style="max-width:680px;margin:0 auto">
-
-    <div class="combinado-card">
-      <div class="combinado-nombre">El Jai Alai</div>
-      <div class="combinado-ingredientes">Vermut rojo · Ginebra · Soda · Hierba luisa de A Baiuca</div>
-      <div class="combinado-historia">
-        Nació en 1924 en la barra del frontón de La Habana, donde los pelotaris vascos 
-        eran estrellas. "Jai Alai" en euskera significa "fiesta alegre" — y "cesta punta". 
-        Piñeiro lo trajo de Cuba. Solo Elenita conocía la dosis exacta.
-        El secreto mejor guardado de A Estrada durante casi un siglo.
-      </div>
-      <div class="combinado-precio">8,00 €</div>
-    </div>
-
-    <div class="combinado-card">
-      <div class="combinado-nombre">El Delacalle</div>
-      <div class="combinado-ingredientes">Agua con gas · Limón · Menta fresca · Jarabe de agave · Lima</div>
-      <div class="combinado-historia">
-        Lo creó Piñeiro especialmente para el Doctor Manuel de la Calle, 
-        que no bebía alcohol. Tuvo tanto éxito entre el resto de la clientela 
-        que acabó siendo tan pedido como el Jai Alai.
-      </div>
-      <div class="combinado-precio">5,00 €</div>
-    </div>
-
-    <div class="combinado-card">
-      <div class="combinado-nombre">El Pelotari</div>
-      <div class="combinado-ingredientes">Ron añejo · Zumo de naranja natural · Angostura · Piel de naranja</div>
-      <div class="combinado-historia">
-        Lo que bebían los vascos en La Habana cuando ganaban. 
-        Ron cubano, cítrico gallego. Dos mundos en un vaso.
-      </div>
-      <div class="combinado-precio">9,00 €</div>
-    </div>
-
-    <div class="combinado-card">
-      <div class="combinado-nombre">El Enriquiño</div>
-      <div class="combinado-ingredientes">Vermut blanco · Licor 43 · Soda de limón · Aceitunas manzanilla</div>
-      <div class="combinado-historia">
-        En honor a los Hermanos Vázquez Esmoris — los "Enriquiños" — 
-        propietarios históricos de este edificio que alojó el Café Puerta del Sol 
-        durante casi un siglo. El combinado de la casa.
-      </div>
-      <div class="combinado-precio">8,00 €</div>
-    </div>
-
-    <div class="divisor" style="border-color:rgba(201,168,76,.15)">
-      <span style="color:rgba(201,168,76,.4)">◆</span>
-    </div>
-
-    <!-- Vinos y bebidas -->
-    <div style="margin-top:1rem">
-      <div class="item" style="border-bottom-color:rgba(255,255,255,.08)">
-        <div class="item-left">
-          <p class="item-nombre" style="color:var(--oro-l)">Albariño Rías Baixas</p>
-          <p class="item-sub" style="color:rgba(255,255,255,.45)">Copa · Fresco y atlántico</p>
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-3xl">💬</span>
+                    <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Whats<span class="text-green-600">Loyalty</span></h1>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <button class="tab-btn active text-slate-500 hover:text-green-600 px-1 py-5 text-sm font-medium transition-colors" data-target="impacto">Visión & Impacto</button>
+                    <button class="tab-btn text-slate-500 hover:text-green-600 px-1 py-5 text-sm font-medium transition-colors" data-target="ventajas">Ventajas Ganar-Ganar</button>
+                    <button class="tab-btn text-slate-500 hover:text-green-600 px-1 py-5 text-sm font-medium transition-colors" data-target="plataforma">La Plataforma</button>
+                    <button class="tab-btn text-slate-500 hover:text-green-600 px-1 py-5 text-sm font-medium transition-colors" data-target="experiencia">UX y Casos</button>
+                    <button class="tab-btn text-slate-500 hover:text-green-600 px-1 py-5 text-sm font-medium transition-colors" data-target="analitica">Analítica</button>
+                </nav>
+            </div>
         </div>
-        <div class="item-precio">3,50 €</div>
-      </div>
-      <div class="item" style="border-bottom-color:rgba(255,255,255,.08)">
-        <div class="item-left">
-          <p class="item-nombre" style="color:var(--oro-l)">Mencía Ribeira Sacra</p>
-          <p class="item-sub" style="color:rgba(255,255,255,.45)">Copa · Mineral y frutal</p>
+        <div class="md:hidden flex overflow-x-auto bg-slate-50 border-t border-slate-200 hide-scrollbar">
+            <button class="tab-btn active text-slate-600 whitespace-nowrap px-4 py-3 text-sm font-medium" data-target="impacto">Impacto</button>
+            <button class="tab-btn text-slate-600 whitespace-nowrap px-4 py-3 text-sm font-medium" data-target="ventajas">Ventajas</button>
+            <button class="tab-btn text-slate-600 whitespace-nowrap px-4 py-3 text-sm font-medium" data-target="plataforma">Plataforma</button>
+            <button class="tab-btn text-slate-600 whitespace-nowrap px-4 py-3 text-sm font-medium" data-target="experiencia">UX/Casos</button>
+            <button class="tab-btn text-slate-600 whitespace-nowrap px-4 py-3 text-sm font-medium" data-target="analitica">Analítica</button>
         </div>
-        <div class="item-precio">3,50 €</div>
-      </div>
-      <div class="item" style="border-bottom-color:rgba(255,255,255,.08)">
-        <div class="item-left">
-          <p class="item-nombre" style="color:var(--oro-l)">Orujo de hierbas gallego</p>
-          <p class="item-sub" style="color:rgba(255,255,255,.45)">Chupito · Digestivo de la casa</p>
+    </header>
+
+    <main class="flex-grow p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+
+        <!-- Sección 1: Visión -->
+        <section id="impacto" class="tab-content animate-fade-in block">
+            <div class="mb-8 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">El Motor de Retención en tu Bolsillo</h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    Transformar WhatsApp en un programa de lealtad automatizado permite una interacción inmediata, eliminando las barreras de entrada tradicionales.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Tasa de Apertura del Canal</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">WhatsApp vs. Email Marketing convencional.</p>
+                    <div class="chart-container w-full">
+                        <canvas id="openRateChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Aumento de Registros</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">Impacto al no requerir descarga de apps.</p>
+                    <div class="chart-container w-full">
+                        <canvas id="registrationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Ventajas: Empresa vs Cliente -->
+        <section id="ventajas" class="tab-content animate-fade-in hidden">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">¿Por qué WhatsLoyalty para tu negocio?</h2>
+                <p class="text-lg text-slate-600">Un ecosistema diseñado para maximizar el valor de cada visita y fidelizar a tus mejores activos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Ventajas para la Empresa -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2 mb-6">
+                        <span class="p-2 bg-blue-100 rounded-lg text-blue-600">🏢</span> Para el Negocio (Bar, Gym, Restaurante)
+                    </h3>
+                    
+                    <!-- NUEVA VENTAJA: GRUPOS VIP -->
+                    <div class="benefit-card vip-highlight bg-white p-5 rounded-xl border border-slate-100 shadow-md">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-slate-900">Grupos VIP Directos</h4>
+                            <span class="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded">ESTRATEGIA TOP</span>
+                        </div>
+                        <p class="text-sm text-slate-600">Crea canales exclusivos para tus clientes más fieles. Sin algoritmos que oculten tus mensajes: comunicación 100% directa para eventos, catas o promociones relámpago.</p>
+                    </div>
+
+                    <div class="benefit-card bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                        <h4 class="font-bold text-slate-900">Aumento de Recurrencia Automática</h4>
+                        <p class="text-sm text-slate-600 mt-1">El sistema detecta quién lleva tiempo sin ir y le envía un incentivo personalizado para que vuelva hoy mismo.</p>
+                    </div>
+
+                    <div class="benefit-card bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                        <h4 class="font-bold text-slate-900">Base de Datos de tu Propiedad</h4>
+                        <p class="text-sm text-slate-600 mt-1">No dependas de plataformas externas. Conoce los hábitos, gustos y frecuencia real de tus clientes.</p>
+                    </div>
+
+                    <div class="benefit-card bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                        <h4 class="font-bold text-slate-900">Gestión de Crisis en Privado</h4>
+                        <p class="text-sm text-slate-600 mt-1">Filtra el feedback negativo en el chat de WhatsApp antes de que llegue a portales de reseñas públicos.</p>
+                    </div>
+                </div>
+
+                <!-- Ventajas para el Cliente -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2 mb-6">
+                        <span class="p-2 bg-green-100 rounded-lg text-green-600">👤</span> Para el Cliente Final
+                    </h3>
+
+                    <div class="benefit-card bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                        <h4 class="font-bold text-slate-900">Fricción Cero (Sin Apps)</h4>
+                        <p class="text-sm text-slate-600 mt-1">El cliente odia bajar apps. Con WhatsLoyalty, su tarjeta de puntos vive donde ya pasa el tiempo: WhatsApp.</p>
+                    </div>
+
+                    <div class="benefit-card bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                        <h4 class="font-bold text-slate-900">Sentirse Parte del "Círculo VIP"</h4>
+                        <p class="text-sm text-slate-600 mt-1">Recibir noticias y beneficios exclusivos directamente en su móvil le hace sentir un cliente preferente.</p>
+                    </div>
+
+                    <div class="benefit-card bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                        <h4 class="font-bold text-slate-900">Consulta de Saldo al Instante</h4>
+                        <p class="text-sm text-slate-600 mt-1">Transparencia total. Escribe una palabra y sabe cuántos puntos tiene para su próximo premio.</p>
+                    </div>
+
+                    <div class="benefit-card bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                        <h4 class="font-bold text-slate-900">Canje Ágil con QR</h4>
+                        <p class="text-sm text-slate-600 mt-1">Sin errores humanos. El cliente muestra su código QR en el local y el beneficio se aplica al momento.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2: La Plataforma -->
+        <section id="plataforma" class="tab-content animate-fade-in hidden">
+            <div class="mb-8 max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4 text-center">Funciones y Ventajas Competitivas</h2>
+                <p class="text-lg text-slate-600 leading-relaxed text-center">
+                    Capacidades técnicas de WhatsLoyalty para centralizar datos y automatizar la fidelización.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 flex flex-col gap-3" id="feature-buttons">
+                    <button class="feature-btn bg-white border border-green-500 shadow-md rounded-lg p-4 text-left transition-all hover:bg-green-50" data-feature="tarjetas">
+                        <div class="text-xl mb-1">💳</div>
+                        <h4 class="font-bold text-slate-800">Tarjetas Digitales & Flujos</h4>
+                    </button>
+                    <button class="feature-btn bg-white border border-slate-200 shadow-sm rounded-lg p-4 text-left transition-all hover:bg-green-50" data-feature="automatizacion">
+                        <div class="text-xl mb-1">🤖</div>
+                        <h4 class="font-bold text-slate-800">Automatización de Mensajes</h4>
+                    </button>
+                    <button class="feature-btn bg-white border border-slate-200 shadow-sm rounded-lg p-4 text-left transition-all hover:bg-green-50" data-feature="integracion">
+                        <div class="text-xl mb-1">🔄</div>
+                        <h4 class="font-bold text-slate-800">Integración POS & CRM</h4>
+                    </button>
+                    <button class="feature-btn bg-white border border-slate-200 shadow-sm rounded-lg p-4 text-left transition-all hover:bg-green-50" data-feature="winback">
+                        <div class="text-xl mb-1">🎯</div>
+                        <h4 class="font-bold text-slate-800">Win-back y Feedback</h4>
+                    </button>
+                </div>
+
+                <div class="lg:col-span-2 bg-white rounded-2xl p-8 shadow-sm border border-slate-100 min-h-[300px] flex flex-col justify-center" id="feature-display">
+                    <div id="feature-content-tarjetas" class="feature-content block">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">💳 Tarjetas de Lealtad y WhatsApp Flows</h3>
+                        <p class="text-slate-600 mb-4 text-lg">Consulta de saldo y acumulación de puntos en tiempo real dentro del chat.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-500 mt-1">✔</span>
+                                <span class="text-slate-700"><strong>Interfaces Interactivas:</strong> Uso de WhatsApp Flows para formularios nativos.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-500 mt-1">✔</span>
+                                <span class="text-slate-700"><strong>Cupones Inteligentes:</strong> Generación de códigos QR únicos para canjes fluidos.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 3: UX y Casos -->
+        <section id="experiencia" class="tab-content animate-fade-in hidden">
+            <div class="mb-8 max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Experiencia de Usuario y Aplicación</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8">
+                <div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-6 border-b pb-2">El Viaje del Cliente</h3>
+                    <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                        <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active step-card bg-white p-4 rounded-xl shadow-sm border border-slate-100 z-10">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-200 text-slate-500 group-[.is-active]:bg-green-500 group-[.is-active]:text-white shadow shrink-0 step-circle">1</div>
+                            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] pl-4 md:pl-0 md:odd:pr-6 md:even:pl-6 text-left">
+                                <h4 class="text-lg font-bold text-slate-800">Registro Fácil</h4>
+                                <p class="text-sm text-slate-600 mt-1">Escaneo de QR en el local. Cero descargas.</p>
+                            </div>
+                        </div>
+                        <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active step-card bg-white p-4 rounded-xl shadow-sm border border-slate-100 z-10">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-200 text-slate-500 group-[.is-active]:bg-green-500 group-[.is-active]:text-white shadow shrink-0 step-circle">2</div>
+                            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] pl-4 md:pl-0 md:odd:pr-6 md:even:pl-6 md:text-right">
+                                <h4 class="text-lg font-bold text-slate-800">Consulta 24/7</h4>
+                                <p class="text-sm text-slate-600 mt-1">El usuario escribe "Puntos" y el bot responde al instante.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-6 border-b pb-2">Casos por Industria</h3>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <button class="usecase-btn px-4 py-2 rounded-full bg-green-600 text-white text-sm font-medium" data-case="restaurantes">🍽️ Restaurantes</button>
+                        <button class="usecase-btn px-4 py-2 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 text-sm font-medium" data-case="retail">🛍️ Retail</button>
+                        <button class="usecase-btn px-4 py-2 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 text-sm font-medium" data-case="servicios">📅 Gimnasios/Servicios</button>
+                    </div>
+
+                    <div id="usecase-display" class="bg-white p-6 rounded-xl shadow-sm min-h-[200px]">
+                        <div id="case-restaurantes" class="case-content block">
+                            <h4 class="text-xl font-bold text-slate-800 mb-3 text-green-700">Estrategia para Restaurantes</h4>
+                            <p class="text-slate-600 mb-4">Incentivos contextuales para optimizar la afluencia.</p>
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                                <span class="font-semibold block mb-1">Ejemplo Práctico:</span>
+                                Cupón de "Postre gratis" enviado vía WhatsApp si el cliente no nos visita en 15 días.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 4: Analítica -->
+        <section id="analitica" class="tab-content animate-fade-in hidden">
+            <div class="mb-8 max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Dashboard & Retorno de Inversión (ROI)</h2>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mt-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800">Rendimiento de Campañas</h3>
+                    </div>
+                    <div class="text-right">
+                        <span class="block text-xs text-slate-500 uppercase">LTV Promedio</span>
+                        <span class="text-xl font-bold text-green-600">+45%</span>
+                    </div>
+                </div>
+                <div class="chart-container w-full" style="max-width: 900px;">
+                    <canvas id="roiChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 py-10 mt-12 text-center">
+        <div class="max-w-3xl mx-auto px-4">
+            <p class="text-white font-medium text-lg">Avenida de Recoletos 26, 20080 Madrid</p>
         </div>
-        <div class="item-precio">2,50 €</div>
-      </div>
-      <div class="item" style="border-bottom-color:rgba(255,255,255,.08)">
-        <div class="item-left">
-          <p class="item-nombre" style="color:var(--oro-l)">Café de puchero</p>
-          <p class="item-sub" style="color:rgba(255,255,255,.45)">Como lo hacía Elenita — con la cafetera de mango y brazo</p>
-        </div>
-        <div class="item-precio">1,80 €</div>
-      </div>
-    </div>
+    </footer>
 
-    <p class="alergenos" style="color:rgba(255,255,255,.25);margin-top:2.5rem">
-      Si tienes alguna alergia o intolerancia, consúltanos antes de pedir.<br>
-      Productos de temporada sujetos a disponibilidad. Precios IVA incluido.
-    </p>
-  </div>
-</section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Navigation Logic ---
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
 
-<!-- ══ FOOTER ══ -->
-<footer class="carta-footer">
-  <p>
-    "Así que el Jai Alai, el esparadrapo, el Delacalle, 
-    los cacahuetes, las aceitunas con hueso y los trocitos de pan 
-    untados con aquella salsa naranja cubrían todas las necesidades 
-    de las mañanas del Puerta del Sol."
-  </p>
-  <p style="font-size:.75rem;color:rgba(255,255,255,.25);margin-bottom:2rem">
-    — Ricardo Terceiro, "Historias do Adoquín", 2022
-  </p>
-  <div class="logo-footer">Puerta <em>del Sol</em></div>
-  <p style="font-size:.7rem;margin-top:1rem;letter-spacing:.15em">
-    A ESTRADA · GALICIA
-  </p>
-</footer>
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.add('hidden'));
 
-<script>
-function scrollTo(id){
-  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-}
+                    const targetId = btn.getAttribute('data-target');
+                    document.getElementById(targetId).classList.remove('hidden');
+                    
+                    document.querySelectorAll(`.tab-btn[data-target="${targetId}"]`).forEach(b => {
+                         b.classList.add('active');
+                    });
 
-// Activar nav según scroll
-const secciones = ['travesia','habana','fronton','huerta','vuelta','barra'];
-const observer = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      const idx = secciones.indexOf(e.target.id);
-      if(idx>=0){
-        document.querySelectorAll('.nav-btn').forEach((b,i)=>{
-          b.classList.toggle('active',i===idx);
+                    window.dispatchEvent(new Event('resize'));
+                });
+            });
+
+            // --- Features Interactive Logic ---
+            const featureData = {
+                'tarjetas': { icon: '💳', title: 'Tarjetas Digitales', desc: 'Consulta de saldo y acumulación de puntos en el chat.', points: ['<strong>F Flows:</strong> Formularios nativos.', '<strong>Cupones:</strong> Códigos QR únicos.'] },
+                'automatizacion': { icon: '🤖', title: 'Automatización', desc: 'Comunicación proactiva para mantener al cliente involucrado.', points: ['<strong>Onboarding:</strong> Mensajes de bienvenida.', '<strong>Fidelización:</strong> Regalos de cumpleaños.'] },
+                'integracion': { icon: '🔄', title: 'Integración Total', desc: 'Conexión directa con tu ecosistema actual de ventas.', points: ['<strong>Conexión POS:</strong> Sincronización con el punto de venta.', '<strong>CRM:</strong> Perfil de cliente unificado.'] },
+                'winback': { icon: '🎯', title: 'Recuperación & NPS', desc: 'Identifica problemas antes de que se vuelvan virales.', points: ['<strong>Win-back:</strong> Recupera clientes inactivos.', '<strong>Encuestas:</strong> Medición del NPS automática.'] }
+            };
+
+            const featureBtns = document.querySelectorAll('.feature-btn');
+            const featureDisplay = document.getElementById('feature-display');
+
+            featureBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    featureBtns.forEach(b => b.classList.replace('border-green-500', 'border-slate-200'));
+                    btn.classList.replace('border-slate-200', 'border-green-500');
+
+                    const data = featureData[btn.getAttribute('data-feature')];
+                    featureDisplay.innerHTML = `
+                        <div class="animate-fade-in">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">${data.icon} ${data.title}</h3>
+                            <p class="text-slate-600 mb-4 text-lg">${data.desc}</p>
+                            <ul class="space-y-3">${data.points.map(p => `<li class="flex items-start gap-2"><span class="text-green-500 mt-1">✔</span><span class="text-slate-700">${p}</span></li>`).join('')}</ul>
+                        </div>`;
+                });
+            });
+
+            // --- Use Cases Logic ---
+            const caseData = {
+                'restaurantes': { title: 'Restaurantes', desc: 'Optimización de afluencia.', example: 'Cupón de postre gratis enviado vía WhatsApp si el cliente no nos visita en 15 días.' },
+                'retail': { title: 'Retail & Moda', desc: 'Aumento del ticket promedio.', example: 'Acceso exclusivo a colecciones 24h antes para VIPs.' },
+                'servicios': { title: 'Gimnasios & Servicios', desc: 'Reducción de inasistencias.', example: 'Recordatorios de citas con confirmación directa para evitar "No-Shows".' }
+            };
+
+            const caseBtns = document.querySelectorAll('.usecase-btn');
+            const caseDisplay = document.getElementById('usecase-display');
+
+            caseBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    caseBtns.forEach(b => b.classList.replace('bg-green-600', 'bg-slate-200'));
+                    btn.classList.replace('bg-slate-200', 'bg-green-600');
+                    btn.classList.add('text-white');
+
+                    const data = caseData[btn.getAttribute('data-case')];
+                    caseDisplay.innerHTML = `
+                        <div class="animate-fade-in">
+                            <h4 class="text-xl font-bold text-green-700 mb-3">${data.title}</h4>
+                            <p class="text-slate-600 mb-4">${data.desc}</p>
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                                <span class="font-semibold block mb-1">Ejemplo Práctico:</span> ${data.example}
+                            </div>
+                        </div>`;
+                });
+            });
+
+            // --- Charts ---
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            const commonOptions = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } };
+
+            new Chart(document.getElementById('openRateChart'), {
+                type: 'doughnut',
+                data: { labels: ['WhatsApp (98%)', 'Email (20%)'], datasets: [{ data: [98, 20], backgroundColor: ['#22c55e', '#e2e8f0'], borderWidth: 0 }] },
+                options: { ...commonOptions, cutout: '75%' }
+            });
+
+            new Chart(document.getElementById('registrationChart'), {
+                type: 'bar',
+                data: { labels: ['App Nativa', 'WhatsLoyalty'], datasets: [{ data: [100, 320], backgroundColor: ['#94a3b8', '#22c55e'], borderRadius: 6 }] },
+                options: { ...commonOptions, scales: { y: { display: false }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+            });
+
+            new Chart(document.getElementById('roiChart'), {
+                type: 'line',
+                data: { labels: ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4', 'Mes 5', 'Mes 6'], datasets: [{ label: 'ROI (%)', data: [15, 30, 55, 80, 120, 185], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', fill: true, tension: 0.4 }] },
+                options: commonOptions
+            });
         });
-      }
-    }
-  });
-},{threshold:.3});
-secciones.forEach(id=>{
-  const el=document.getElementById(id);
-  if(el) observer.observe(el);
-});
-</script>
+    </script>
 </body>
 </html>
